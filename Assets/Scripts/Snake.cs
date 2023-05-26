@@ -1,0 +1,194 @@
+using UnityEngine;
+
+public class Snake : MonoBehaviour
+{
+    public GameObject prefabBody;
+
+    public GameObject prefabRot1;
+
+    public GameObject prefabRot2;
+
+    float speed = 1;
+
+    float screenWidth = 0;
+
+    float screenHeight = 0;
+
+    int headRot = 0;
+    // Start is called before the first frame update
+    void Start()
+    {
+        screenHeight = 30;
+        screenWidth = (Screen.width / (Screen.height / screenHeight)) - 1.7f;
+    }
+
+    // Update is called once per frame
+    float timer = 1;
+    
+    void Update()
+    {
+        if(timer * speed > 1) {
+            Move();
+            timer = 0;
+        }
+        timer += Time.deltaTime;
+    }
+
+    void Move()
+    {   
+        Head h = GetComponentInChildren<Head>();
+
+        if(headRot == 0 && h.transform.position.x + 3.4f < screenWidth) {
+
+            Instantiate(prefabBody, h.transform.position, Quaternion.Euler(0, 0, headRot), transform);
+
+            h.transform.position = new Vector3(h.transform.position.x + 3.4f,
+                                                h.transform.position.y, 
+                                                h.transform.position.z);
+
+            MoveBody();
+        }
+        if(headRot == 90 && h.transform.position.y + 3.4f < screenHeight) {
+
+            Instantiate(prefabBody, h.transform.position, Quaternion.Euler(0, 0, headRot), transform);
+
+            h.transform.position = new Vector3(h.transform.position.x,
+                                                h.transform.position.y + 3.4f, 
+                                                h.transform.position.z);
+
+            MoveBody();
+        }
+        if(headRot == 180 && h.transform.position.x - 3.4f < screenWidth) {
+
+            Instantiate(prefabBody, h.transform.position, Quaternion.Euler(0, 0, headRot), transform);
+
+            h.transform.position = new Vector3(h.transform.position.x - 3.4f,
+                                                h.transform.position.y, 
+                                                h.transform.position.z);
+
+            MoveBody();
+        }
+        if(headRot == 270 && h.transform.position.y - 3.4f < screenHeight) {
+
+            Instantiate(prefabBody, h.transform.position, Quaternion.Euler(0, 0, headRot), transform);
+
+            h.transform.position = new Vector3(h.transform.position.x,
+                                                h.transform.position.y - 3.4f, 
+                                                h.transform.position.z);
+
+            MoveBody();
+        }
+    }
+
+    void MoveBody() 
+    {
+        Body[] bb = GetComponentsInChildren<Body>();
+
+        Tail t = GetComponentInChildren<Tail>();
+
+        t.transform.rotation = bb[1].transform.rotation;
+        t.transform.position = bb[0].transform.position;
+
+        Destroy(bb[0].gameObject);
+    }
+
+    public void Up()
+    {
+        timer = 0;
+        if (headRot == 0 || headRot == 180) {
+
+            Head h = GetComponentInChildren<Head>();
+
+            h.transform.rotation = Quaternion.Euler(0, 0, 90);
+
+            if (headRot == 180)
+                Instantiate(prefabRot1, h.transform.position, Quaternion.Euler(0, 0, headRot), transform);
+            
+            if (headRot == 0)
+                Instantiate(prefabRot2, h.transform.position, Quaternion.Euler(0, 0, headRot), transform);
+
+            headRot = 90;
+
+            h.transform.position = new Vector3(h.transform.position.x,
+                                                h.transform.position.y + 3.4f, 
+                                                h.transform.position.z);
+                                    
+            MoveBody();
+        }
+    }
+
+    public void Down()
+    {
+        timer = 0;
+        if (headRot == 0 || headRot == 180) {
+
+            Head h = GetComponentInChildren<Head>();
+
+            h.transform.rotation = Quaternion.Euler(0, 0, 270);
+
+            if (headRot == 180)
+                Instantiate(prefabRot2, h.transform.position, Quaternion.Euler(0, 0, headRot), transform);
+            
+            if (headRot == 0)
+                Instantiate(prefabRot1, h.transform.position, Quaternion.Euler(0, 0, headRot), transform);
+
+            headRot = 270;
+
+            h.transform.position = new Vector3(h.transform.position.x,
+                                                h.transform.position.y - 3.4f, 
+                                                h.transform.position.z);
+                                    
+            MoveBody();
+        }
+    }
+
+    public void Right()
+    {
+        timer = 0;
+        if (headRot == 90 || headRot == 270) {
+
+            Head h = GetComponentInChildren<Head>();
+
+            h.transform.rotation = Quaternion.Euler(0, 0, 0);
+
+            if (headRot == 90)
+                Instantiate(prefabRot1, h.transform.position, Quaternion.Euler(0, 0, headRot), transform);
+            
+            if (headRot == 270)
+                Instantiate(prefabRot2, h.transform.position, Quaternion.Euler(0, 0, headRot), transform);
+
+            headRot = 0;
+
+            h.transform.position = new Vector3(h.transform.position.x + 3.4f,
+                                                h.transform.position.y, 
+                                                h.transform.position.z);
+                                    
+            MoveBody();
+        }
+    }
+
+    public void Left()
+    {
+        timer = 0;
+        if (headRot == 90 || headRot == 270) {
+
+            Head h = GetComponentInChildren<Head>();
+
+            h.transform.rotation = Quaternion.Euler(0, 0, 180);
+
+            if (headRot == 90)
+                Instantiate(prefabRot2, h.transform.position, Quaternion.Euler(0, 0, headRot), transform);
+            
+            if (headRot == 270)
+                Instantiate(prefabRot1, h.transform.position, Quaternion.Euler(0, 0, headRot), transform);
+
+            headRot = 180;
+
+            h.transform.position = new Vector3(h.transform.position.x - 3.4f,
+                                                h.transform.position.y, 
+                                                h.transform.position.z);
+                                    
+            MoveBody();
+        }
+    }
+}
