@@ -8,13 +8,16 @@ public class Snake : MonoBehaviour
 
     public GameObject prefabRot2;
 
-    float speed = 1;
+    float speed = 2;
 
     float screenWidth = 0;
 
     float screenHeight = 0;
 
     int headRot = 0;
+
+    bool is_eaten = false;
+
     // Start is called before the first frame update
     void Start()
     {
@@ -80,16 +83,48 @@ public class Snake : MonoBehaviour
         }
     }
 
-    void MoveBody() 
+    public void Reload()
     {
-        Body[] bb = GetComponentsInChildren<Body>();
+        headRot = 0;
+        
+        Head h = GetComponentInChildren<Head>();
+        h.transform.position = new Vector3(3.4f, 0, 0);
+        h.transform.rotation = Quaternion.Euler(0, 0, 0);
 
         Tail t = GetComponentInChildren<Tail>();
+        t.transform.position = new Vector3(-6.8f, 0, 0);
+        t.transform.rotation = Quaternion.Euler(0, 0, 0);
 
-        t.transform.rotation = bb[1].transform.rotation;
-        t.transform.position = bb[0].transform.position;
+        var bb = GetComponentsInChildren<Body>();
 
-        Destroy(bb[0].gameObject);
+        foreach(var b in bb){
+            Destroy(b.gameObject);
+        }
+
+        Instantiate(prefabBody, new Vector3(-3.4f, 0, 0), Quaternion.identity, transform);
+        Instantiate(prefabBody, new Vector3(0    , 0, 0), Quaternion.identity, transform);
+    }
+
+
+    public void Eat()
+    {
+        is_eaten = true;
+    }
+
+    void MoveBody() 
+    {
+        if (!is_eaten) {
+            Body[] bb = GetComponentsInChildren<Body>();
+
+            Tail t = GetComponentInChildren<Tail>();
+
+            t.transform.rotation = bb[1].transform.rotation;
+            t.transform.position = bb[0].transform.position;
+
+            Destroy(bb[0].gameObject);
+        } 
+        else 
+            is_eaten = false;
     }
 
     public void Up()

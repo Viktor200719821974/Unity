@@ -4,20 +4,20 @@ using UnityEngine;
 
 public class Head : MonoBehaviour
 {
-    // Start is called before the first frame update
-    void Start()
-    {
-        
-    }
-
-    // Update is called once per frame
-    void Update()
-    {
-        
-    }
+    public Snake snake;
+    public GameController GC;
+    public Score score;
 
     void OnTriggerEnter2D(Collider2D other)
     {
-        Debug.Log("Fail");
+        if (other.tag == "Fruite") {
+            snake.Eat();
+            score.UpScore();
+        }
+        else
+        {
+            GC.GameReload();
+        }
+        
     }
 }

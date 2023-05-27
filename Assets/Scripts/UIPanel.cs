@@ -8,7 +8,7 @@ using System;
 public class UIPanel : MonoBehaviour, IPointerDownHandler, IPointerUpHandler
 {
     Vector2 pos;
-    public Snake Snake;
+    public Snake snake;
 
     public void OnPointerUp(PointerEventData e)
     {
@@ -17,16 +17,16 @@ public class UIPanel : MonoBehaviour, IPointerDownHandler, IPointerUpHandler
     
         if (Math.Abs(right) - Math.Abs(up) > 0) {
             if (right < 0)
-                Snake.Right();
+                snake.Right();
             else
-                Snake.Left();
+                snake.Left();
         }
         
         else {
             if (up < 0)
-                Snake.Up();
+                snake.Up();
             else
-                Snake.Down();
+                snake.Down();
         }
         
     }
@@ -41,22 +41,22 @@ public class UIPanel : MonoBehaviour, IPointerDownHandler, IPointerUpHandler
         if (Input.GetAxisRaw("Horizontal") == -1) 
         {
         // Code to move left
-            Snake.Left();
+            snake.Left();
         } 
         else if (Input.GetAxisRaw("Horizontal") == 1) {
         // Code to move right
-            Snake.Right();
+            snake.Right();
         }
 
         if (Input.GetAxisRaw("Vertical") == -1)
         {
         // Code to move down or squat
-            Snake.Down();
+            snake.Down();
         }
         else if (Input.GetAxisRaw("Vertical") == 1)
         {
         // Code to move up or jump
-            Snake.Up();
+            snake.Up();
         }
     }
 
